@@ -25,12 +25,12 @@ def inputs():
             res, imgenc = cv2.imencode(".jpg", img, encode_params)
             data = np.array(imgenc)
             stringData = data.tobytes()
-            if ClientSocket:
-                ClientSocket.sendall(str.encode(str(len(stringData)).ljust(16)))
-                ClientSocket.sendall(stringData)
             cv2.imshow("Host",img)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
+            if ClientSocket:
+                ClientSocket.sendall(str.encode(str(len(stringData)).ljust(16)))
+                ClientSocket.sendall(stringData)
         vid.release()
         cv2.destroyAllWindows()
     

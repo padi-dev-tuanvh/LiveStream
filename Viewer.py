@@ -37,8 +37,10 @@ def output():
         cv2.imshow("Viewer " + threadNo, imgdec)
         q = cv2.waitKey(1)
         if q == ord("q"):
+            cv2.destroyAllWindows()
             break
     ClientSocket.close()
+    cv2.destroyAllWindows()
 
 Response = ClientSocket.recv(1024)
 print(Response.decode('utf-8'))
