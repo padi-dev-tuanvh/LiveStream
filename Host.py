@@ -28,7 +28,7 @@ def inputs():
             if ClientSocket:
                 ClientSocket.sendall(str.encode(str(len(stringData)).ljust(16)))
                 ClientSocket.sendall(stringData)
-            cv2.imshow("Host",img)
+            # cv2.imshow("Host",img)
 
 def recvall(sock, count):
     buf = b''

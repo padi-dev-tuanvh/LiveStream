@@ -34,7 +34,7 @@ def output():
         stringData = recvall(ClientSocket, int(length))
         data = np.frombuffer(stringData, dtype="uint8")
         imgdec = cv2.imdecode(data, cv2.IMREAD_COLOR)
-        cv2.imshow("Client " + threadNo, imgdec)
+        cv2.imshow("Viewer " + threadNo, imgdec)
         q = cv2.waitKey(1)
         if q == ord("q"):
             break
