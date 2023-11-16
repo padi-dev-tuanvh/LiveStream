@@ -19,7 +19,7 @@ encode_params = [int(cv2.IMWRITE_JPEG_QUALITY), 90]
 
 def inputs():
     while True:
-        vid = cv2.VideoCapture("sinh_nhat.mp4") # change to 0 if access camera
+        vid = cv2.VideoCapture(0) # change to 0 if access camera
         while vid.isOpened():
             ret, img = vid.read()
             res, imgenc = cv2.imencode(".jpg", img, encode_params)
