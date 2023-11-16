@@ -4,6 +4,7 @@ from HostModel import HostModel
 from ViewerHost import ViewerHost
 import sys
 import threading
+from queue import Queue
 
 # size of game
 SCREEN_WIDTH = 1020
@@ -19,6 +20,9 @@ default_right = False
 
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Livestream")
+
+queue = Queue()
+event_thread = threading.Event()
 
 # set background image
 BG = pygame.image.load("assets/img/background.png")
@@ -57,6 +61,8 @@ def Livestreaming():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if STOP_VIDEO.checkForInput(MENU_MOUSE_POS):
                     print("Next Game")
+        if not queue.empty():
+            print(queue.get(timeout=1))
         pygame.display.update()
 
 def watchingLivestream():
@@ -87,6 +93,7 @@ def watchingLivestream():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if CLOSE_WATCHING.checkForInput(MENU_MOUSE_POS):
                     print("Next Game")
+                    event_thread.set()
                     mainGame()
         pygame.display.update()
 
@@ -137,11 +144,14 @@ def mainGame():
                     host.connectServer()
                     inp = threading.Thread(target = host.inputs)
                     inp.start()
+                    out = threading.Thread(target=host.output,args=(queue,))
+                    out.daemon = True
+                    out.start()
                     Livestreaming()
                     break
                 if WATCH_LIVE.checkForInput(MENU_MOUSE_POS):
                     print("Watch livestream")
-                    viewer = ViewerHost()
+                    viewer = ViewerHost(event_thread)
                     viewer.connectServer()
                     out = threading.Thread(target = viewer.output)
                     out.start()
@@ -156,10 +166,6 @@ def mainGame():
                     pygame.quit()
                     sys.exit()
         pygame.display.update()
-
-
-
-
 
 mainGame()
 

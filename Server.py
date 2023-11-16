@@ -41,7 +41,10 @@ def threaded_client(connection, addr):
                     thread = addr
                     client.sendall(str.encode(str(ThreadCount).ljust(16))) # New
                     client.sendall(length)
-                    client.sendall(stringData)    
+                    client.sendall(stringData)  
+            else:
+                if client:
+                    client.sendall(str.encode(str(ThreadCount).ljust(16)))
     connection.close()
 
 while True:

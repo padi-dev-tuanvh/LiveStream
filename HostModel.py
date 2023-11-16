@@ -23,10 +23,10 @@ class HostModel:
         print(Response.decode('utf-8'))
 
 
-    def recvall(sock, count):
+    def recvall(self, count):
         buf = b''
         while count:
-            newbuf = sock.recv(count)
+            newbuf = self.ClientSocket.recv(count)
             if not newbuf:
                 return None
             buf += newbuf
@@ -35,7 +35,7 @@ class HostModel:
     
     def inputs(self):
         while True:
-            vid = cv2.VideoCapture(0) # change to 0 if access camera
+            vid = cv2.VideoCapture("D:\TuanVh\LTM\sinh_nhat.mp4") # change to 0 if access camera
             while vid.isOpened():
                 ret, img = vid.read()
                 res, imgenc = cv2.imencode(".jpg", img, self.encode_params)
@@ -49,3 +49,8 @@ class HostModel:
                     self.ClientSocket.sendall(stringData)
             vid.release()
             cv2.destroyAllWindows()
+
+    def output(self,queue):
+        while True:
+            threadNo = self.recvall(16).decode("utf-8")
+            queue.put(threadNo)
